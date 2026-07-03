@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FT PROMAX — Turnamen Free Fire Cepat</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --charcoal:#14161A;
+    --charcoal-2:#1C1F26;
+    --ember:#FF5A1F;
+    --steel:#8B93A7;
+    --bone:#EDEEF0;
+    --gold:#D4A24C;
+    --line: rgba(237,238,240,0.10);
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  html{scroll-behavior:smooth;}
+  body{
+    background:var(--charcoal);
+    color:var(--bone);
+    font-family:'Inter',sans-serif;
+    line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+  }
+  h1,h2,h3{font-family:'Oswald',sans-serif; text-transform:uppercase; letter-spacing:0.02em;}
+  .mono{font-family:'JetBrains Mono',monospace;}
+  a{color:var(--ember); text-decoration:none;}
+  a:hover{text-decoration:underline;}
+  .wrap{max-width:920px; margin:0 auto; padding:0 24px;}
+
+  /* ---- NAV ---- */
+  nav{
+    position:sticky; top:0; z-index:50;
+    background:rgba(20,22,26,0.92);
+    backdrop-filter:blur(8px);
+    border-bottom:1px solid var(--line);
+  }
+  nav .wrap{display:flex; align-items:center; justify-content:space-between; padding-top:14px; padding-bottom:14px; flex-wrap:wrap; gap:10px;}
+  .logo{font-family:'Oswald',sans-serif; font-weight:700; font-size:1.15rem; letter-spacing:0.04em; color:var(--bone);}
+  .logo span{color:var(--ember);}
+  .navlinks{display:flex; gap:22px; flex-wrap:wrap; font-size:0.85rem; font-weight:500;}
+  .navlinks a{color:var(--steel);}
+  .navlinks a:hover{color:var(--bone); text-decoration:none;}
+
+  /* ---- HERO / SCHEDULE TICKER ---- */
+  header.hero{padding:64px 0 40px; border-bottom:1px solid var(--line);}
+  .eyebrow{color:var(--ember); font-family:'JetBrains Mono',monospace; font-size:0.78rem; letter-spacing:0.12em; text-transform:uppercase; margin-bottom:14px;}
+  .hero h1{font-size:clamp(2.1rem, 6vw, 3.4rem); line-height:1.05; margin-bottom:18px;}
+  .hero h1 .accent{color:var(--ember);}
+  .hero p.lead{color:var(--steel); max-width:560px; font-size:1.02rem; margin-bottom:32px;}
+
+  .ticker-label{font-family:'JetBrains Mono',monospace; font-size:0.75rem; color:var(--steel); letter-spacing:0.08em; margin-bottom:10px; text-transform:uppercase;}
+  .ticker{display:grid; grid-template-columns:repeat(auto-fill, minmax(52px,1fr)); gap:6px; margin-bottom:14px;}
+  .slot{
+    font-family:'JetBrains Mono',monospace; font-weight:700; font-size:0.85rem;
+    text-align:center; padding:10px 4px; border-radius:3px;
+    border:1px solid var(--line); color:var(--steel);
+  }
+  .slot.open{background:var(--ember); color:var(--charcoal); border-color:var(--ember);}
+  .ticker-note{color:var(--steel); font-size:0.82rem;}
+
+  /* ---- SECTIONS ---- */
+  section{padding:56px 0; border-bottom:1px solid var(--line);}
+  section h2{font-size:1.6rem; margin-bottom:6px;}
+  .section-sub{color:var(--steel); font-size:0.9rem; margin-bottom:28px;}
+
+  .grid3{display:grid; grid-template-columns:repeat(3,1fr); gap:20px;}
+  @media(max-width:720px){.grid3{grid-template-columns:1fr;}}
+  .card{background:var(--charcoal-2); border:1px solid var(--line); border-radius:6px; padding:22px;}
+  .card .num{font-family:'JetBrains Mono',monospace; color:var(--ember); font-weight:700; font-size:0.85rem; margin-bottom:10px;}
+  .card h3{font-size:1.02rem; margin-bottom:8px; text-transform:none; letter-spacing:0;}
+  .card p{color:var(--steel); font-size:0.9rem;}
+
+  .list-clean{list-style:none;}
+  .list-clean li{
+    padding:16px 0; border-bottom:1px solid var(--line);
+    display:flex; gap:16px; align-items:flex-start;
+  }
+  .list-clean li:last-child{border-bottom:none;}
+  .list-clean .tag{
+    font-family:'JetBrains Mono',monospace; font-size:0.72rem; color:var(--ember);
+    border:1px solid rgba(255,90,31,0.35); border-radius:3px; padding:3px 8px;
+    flex-shrink:0; margin-top:2px; white-space:nowrap;
+  }
+  .list-clean p{color:var(--bone); font-size:0.93rem;}
+  .list-clean p b{color:var(--gold); font-weight:600;}
+
+  .faq-item{border-bottom:1px solid var(--line); padding:18px 0;}
+  .faq-item:last-child{border-bottom:none;}
+  .faq-item summary{cursor:pointer; font-weight:600; font-size:0.96rem; list-style:none; display:flex; justify-content:space-between; gap:16px;}
+  .faq-item summary::-webkit-details-marker{display:none;}
+  .faq-item summary::after{content:"+"; color:var(--ember); font-family:'JetBrains Mono',monospace; font-size:1.1rem;}
+  .faq-item[open] summary::after{content:"–";}
+  .faq-item p{color:var(--steel); margin-top:10px; font-size:0.9rem; max-width:640px;}
+
+  .contact-grid{display:grid; grid-template-columns:1fr 1fr; gap:20px;}
+  @media(max-width:640px){.contact-grid{grid-template-columns:1fr;}}
+  .contact-card{background:var(--charcoal-2); border:1px solid var(--line); border-radius:6px; padding:20px;}
+  .contact-card .label{font-family:'JetBrains Mono',monospace; font-size:0.72rem; color:var(--steel); text-transform:uppercase; letter-spacing:0.08em; margin-bottom:6px;}
+  .contact-card .value{font-size:0.98rem; font-weight:500;}
+
+  footer{padding:32px 0; text-align:center; color:var(--steel); font-size:0.8rem;}
+  footer .fine{margin-top:6px; opacity:0.6;}
+
+  .badge-note{
+    background:rgba(212,162,76,0.08); border:1px solid rgba(212,162,76,0.3);
+    color:var(--gold); font-size:0.82rem; border-radius:6px; padding:12px 16px; margin-top:18px;
+  }
+
+  .price-table{width:100%; border-collapse:collapse; margin-top:8px;}
+  .price-table th, .price-table td{
+    text-align:left; padding:14px 12px; border-bottom:1px solid var(--line); font-size:0.9rem;
+  }
+  .price-table th{
+    font-family:'JetBrains Mono',monospace; font-size:0.72rem; text-transform:uppercase;
+    letter-spacing:0.06em; color:var(--steel); font-weight:500;
+  }
+  .price-table td.price{color:var(--ember); font-weight:700; font-family:'JetBrains Mono',monospace; white-space:nowrap;}
+  .price-table tr:last-child td{border-bottom:none;}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="wrap">
+    <div class="logo">FT <span>PROMAX</span></div>
+    <div class="navlinks">
+      <a href="#tentang">Tentang</a>
+      <a href="#layanan">Layanan &amp; Harga</a>
+      <a href="#syarat">Syarat &amp; Ketentuan</a>
+      <a href="#refund">Kebijakan Refund</a>
+      <a href="#privasi">Kebijakan Privasi</a>
+      <a href="#faq">FAQ</a>
+      <a href="#kontak">Kontak</a>
+    </div>
+  </div>
+</nav>
+
+<header class="hero">
+  <div class="wrap">
+    <div class="eyebrow">Turnamen Free Fire Cepat · Jambi, Indonesia</div>
+    <h1>Main sekarang.<br>Menang <span class="accent">jam ini juga.</span></h1>
+    <p class="lead">FT PROMAX menjalankan turnamen Free Fire format cepat, buka tiap jam, langsung lewat WhatsApp. Daftar, transfer, tanding — hadiah cair di hari yang sama.</p>
+
+    <div class="ticker-label">Jadwal sesi hari ini</div>
+    <div class="ticker">
+      <div class="slot">12</div><div class="slot">13</div><div class="slot">14</div>
+      <div class="slot">15</div><div class="slot">16</div><div class="slot">17</div>
+      <div class="slot open">18</div><div class="slot open">19</div><div class="slot">20</div>
+      <div class="slot">21</div><div class="slot">22</div><div class="slot">23</div>
+    </div>
+    <div class="ticker-note">Sesi oranye = sedang <b style="color:var(--ember)">OPEN</b>. Jadwal lengkap &amp; pendaftaran real-time ada di grup WhatsApp — lihat bagian Kontak.</div>
+  </div>
+</header>
+
+<section id="tentang">
+  <div class="wrap">
+    <h2>Tentang FT PROMAX</h2>
+    <p class="section-sub">Bagaimana satu sesi turnamen berjalan, dari daftar sampai hadiah cair.</p>
+    <div class="grid3">
+      <div class="card">
+        <div class="num">01 — DAFTAR</div>
+        <h3>Chat admin, sebut jam main</h3>
+        <p>Peserta menghubungi admin WhatsApp resmi dan menyebutkan jam sesi yang ingin diikuti. Biaya masuk Rp5.000 per tim.</p>
+      </div>
+      <div class="card">
+        <div class="num">02 — TANDING</div>
+        <h3>3 match per sesi, 55 menit</h3>
+        <p>Setiap sesi berlangsung selama 55 menit, berisi 3 pertandingan berturut-turut. Peringkat dihitung dari akumulasi placement dan kill di seluruh match.</p>
+      </div>
+      <div class="card">
+        <div class="num">03 — HADIAH</div>
+        <h3>Hadiah cair 10 menit setelah sesi selesai</h3>
+        <p>Juara 1 Rp20.000, Juara 2 Rp15.000, Juara 3 Rp10.000. Hadiah dibagikan maksimal 10 menit setelah sesi berakhir.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="layanan">
+  <div class="wrap">
+    <h2>Layanan &amp; Harga</h2>
+    <p class="section-sub">Semua biaya dalam Rupiah (IDR), dibayar via QRIS sebelum sesi dimulai.</p>
+    <table class="price-table">
+      <thead>
+        <tr><th>Layanan</th><th>Keterangan</th><th>Harga / Tim</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Sesi Reguler</td>
+          <td>Slot turnamen per jam, 3 match, 55 menit</td>
+          <td class="price">Rp5.000</td>
+        </tr>
+        <tr>
+          <td>Sesi Prime Time (18:00–21:00)</td>
+          <td>Slot jam ramai, format &amp; durasi sama</td>
+          <td class="price">Rp5.000</td>
+        </tr>
+        <tr>
+          <td>Cloter Tambahan</td>
+          <td>Slot cloter kedua saat cloter pertama penuh (maks. 12 tim/cloter)</td>
+          <td class="price">Rp5.000</td>
+        </tr>
+        <tr>
+          <td>Kualifikasi Liga Mingguan</td>
+          <td>Sesi kualifikasi untuk PROMAX LEAGUE WEEKLY</td>
+          <td class="price">Rp5.000</td>
+        </tr>
+        <tr>
+          <td>Kualifikasi Championship Bulanan</td>
+          <td>Sesi kualifikasi untuk turnamen bulanan</td>
+          <td class="price">Rp5.000</td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="badge-note">Hadiah per sesi: Juara 1 Rp20.000 · Juara 2 Rp15.000 · Juara 3 Rp10.000 — cair maksimal 10 menit setelah sesi selesai.</div>
+  </div>
+</section>
+
+<section id="syarat">
+  <div class="wrap">
+    <h2>Syarat &amp; Ketentuan</h2>
+    <p class="section-sub">Berlaku untuk semua peserta yang mendaftar di sesi FT PROMAX.</p>
+    <ul class="list-clean">
+      <li><span class="tag">PENDAFTARAN</span><p>Pendaftaran dianggap sah setelah pembayaran QRIS terkonfirmasi dan peserta menerima link grup sesi dari sistem.</p></li>
+      <li><span class="tag">KUOTA</span><p>Setiap sesi dibagi menjadi beberapa cloter, dengan kuota maksimal 12 tim per cloter. Jika satu cloter penuh, peserta otomatis dialihkan ke cloter berikutnya yang masih tersedia pada sesi yang sama.</p></li>
+      <li><span class="tag">FAIR PLAY</span><p>Dilarang keras menggunakan cheat, hack, exploit bug, atau joki akun. Pelanggaran menyebabkan diskualifikasi tanpa pengembalian biaya masuk.</p></li>
+      <li><span class="tag">KEHADIRAN</span><p>Peserta wajib join grup sesi dan siap bertanding sesuai jam yang didaftarkan. Keterlambatan bergabung menjadi tanggung jawab peserta, bukan kesalahan admin.</p></li>
+      <li><span class="tag">HASIL</span><p>Skor dan peringkat dihitung berdasarkan sistem placement + kill multiplier yang sama untuk semua peserta, dan bersifat final setelah diumumkan di grup.</p></li>
+      <li><span class="tag">PERUBAHAN JADWAL</span><p>FT PROMAX berhak menutup atau menunda sesi karena kendala teknis atau jumlah peserta tidak mencukupi, dengan pemberitahuan di grup.</p></li>
+    </ul>
+  </div>
+</section>
+
+<section id="refund">
+  <div class="wrap">
+    <h2>Kebijakan Refund</h2>
+    <p class="section-sub">Kapan dana dikembalikan, dan bagaimana prosesnya.</p>
+    <ul class="list-clean">
+      <li><span class="tag">SESI BATAL</span><p>Refund <b>hanya berlaku jika sesi dibatalkan</b> oleh pihak FT PROMAX (misalnya karena kendala teknis atau peserta tidak mencukupi). Dana dikembalikan 100%.</p></li>
+      <li><span class="tag">CARA KLAIM</span><p>Peserta akan diminta mengirimkan nomor akun DANA aktif ke admin melalui WhatsApp. Refund diproses ke nomor DANA tersebut.</p></li>
+      <li><span class="tag">WAKTU PROSES</span><p>Refund diproses <b>langsung dalam 5 menit</b> setelah nomor DANA diterima dan diverifikasi oleh admin.</p></li>
+      <li><span class="tag">DI LUAR CAKUPAN</span><p>Refund tidak berlaku untuk peserta yang didiskualifikasi karena pelanggaran fair play, atau yang tidak hadir di sesi setelah pembayaran berhasil dan sesi tetap berjalan.</p></li>
+    </ul>
+  </div>
+</section>
+
+<section id="privasi">
+  <div class="wrap">
+    <h2>Kebijakan Privasi</h2>
+    <p class="section-sub">Bagaimana FT PROMAX mengumpulkan, menggunakan, dan melindungi data peserta.</p>
+    <ul class="list-clean">
+      <li><span class="tag">DATA DIKUMPULKAN</span><p>Nama, nomor WhatsApp, jam sesi yang didaftarkan, dan bukti pembayaran (QRIS/DANA). Untuk klaim refund, nomor akun DANA aktif.</p></li>
+      <li><span class="tag">TUJUAN PENGGUNAAN</span><p>Data digunakan semata untuk memproses pendaftaran, verifikasi pembayaran, komunikasi jadwal sesi, pembagian hadiah, dan proses refund bila diperlukan.</p></li>
+      <li><span class="tag">PIHAK KETIGA</span><p>Data pembayaran diproses melalui penyedia payment gateway/QRIS resmi yang bekerja sama dengan FT PROMAX. Data tidak dijual atau dibagikan ke pihak lain di luar keperluan operasional turnamen.</p></li>
+      <li><span class="tag">PENYIMPANAN</span><p>Data peserta disimpan pada sistem internal FT PROMAX (WhatsApp Business &amp; database pendaftaran) selama diperlukan untuk keperluan operasional dan pencatatan keuangan.</p></li>
+      <li><span class="tag">HAK PESERTA</span><p>Peserta dapat meminta penghapusan data pribadi setelah seluruh transaksi terkait selesai, dengan menghubungi admin melalui WhatsApp atau email resmi.</p></li>
+      <li><span class="tag">KONTAK</span><p>Pertanyaan seputar privasi data dapat diajukan ke <a href="mailto:ftpromax5k@gmail.com">ftpromax5k@gmail.com</a>.</p></li>
+    </ul>
+  </div>
+</section>
+
+<section id="faq">
+  <div class="wrap">
+    <h2>Pertanyaan Umum</h2>
+    <p class="section-sub">Yang paling sering ditanyakan peserta baru.</p>
+
+    <details class="faq-item">
+      <summary>Bagaimana cara daftar sesi FT PROMAX?</summary>
+      <p>Chat admin WhatsApp resmi, sebutkan jam sesi yang mau diikuti (contoh: "mau daftar jam 19, 20"), lalu ikuti instruksi pembayaran QRIS yang dikirim otomatis oleh sistem.</p>
+    </details>
+    <details class="faq-item">
+      <summary>Berapa biaya masuk per tim?</summary>
+      <p>Rp5.000 per tim per sesi, dibayar via QRIS. Nominal harus sesuai persis dengan yang tertera di QR agar terverifikasi otomatis oleh sistem.</p>
+    </details>
+    <details class="faq-item">
+      <summary>QRIS belum muncul / gagal terkirim, harus bagaimana?</summary>
+      <p>Tunggu maksimal 3 menit — sistem akan mengirim ulang pengingat otomatis. Jika tetap tidak muncul, langsung hubungi admin secara manual, jangan mendaftar ulang berkali-kali.</p>
+    </details>
+    <details class="faq-item">
+      <summary>Bagaimana pembagian hadiahnya?</summary>
+      <p>Juara 1 Rp20.000, Juara 2 Rp15.000, Juara 3 Rp10.000, berdasarkan akumulasi placement dan kill selama 3 match dalam sesi (55 menit). Hadiah cair maksimal 10 menit setelah sesi selesai.</p>
+    </details>
+    <details class="faq-item">
+      <summary>Saya sudah transfer tapi belum masuk grup, kenapa?</summary>
+      <p>Link grup dikirim otomatis begitu pembayaran terverifikasi sistem, biasanya dalam hitungan detik. Jika lebih dari beberapa menit belum masuk, hubungi admin dengan menyertakan bukti transfer.</p>
+    </details>
+    <details class="faq-item">
+      <summary>Apakah bisa daftar lebih dari satu sesi sekaligus?</summary>
+      <p>Bisa. Sebutkan semua jam yang diinginkan dalam satu pesan ke admin, sistem akan membuatkan QRIS untuk seluruh sesi yang dipilih.</p>
+    </details>
+    <details class="faq-item">
+      <summary>Kapan saya bisa dapat refund?</summary>
+      <p>Refund hanya berlaku jika sesi yang kamu daftarkan dibatalkan oleh FT PROMAX. Kirim nomor DANA aktif ke admin, dana cair langsung dalam 5 menit setelah diverifikasi.</p>
+    </details>
+  </div>
+</section>
+
+<section id="kontak" style="border-bottom:none;">
+  <div class="wrap">
+    <h2>Kontak</h2>
+    <p class="section-sub">Semua transaksi dan pendaftaran resmi hanya melalui kanal berikut.</p>
+    <div class="contact-grid">
+      <div class="contact-card">
+        <div class="label">Email Resmi</div>
+        <div class="value"><a href="mailto:ftpromax5k@gmail.com">ftpromax5k@gmail.com</a></div>
+      </div>
+      <div class="contact-card">
+        <div class="label">WhatsApp Admin</div>
+        <div class="value"><a href="https://wa.me/6283872900632" target="_blank" rel="noopener">0838-7290-0632</a></div>
+      </div>
+      <div class="contact-card">
+        <div class="label">Instagram</div>
+        <div class="value"><a href="https://instagram.com/ft.promax.id" target="_blank" rel="noopener">@ft.promax.id</a></div>
+      </div>
+      <div class="contact-card">
+        <div class="label">Pemilik Usaha</div>
+        <div class="value">Yogi Riski Permana</div>
+      </div>
+      <div class="contact-card">
+        <div class="label">Domisili Usaha</div>
+        <div class="value">Javana Cozy Corner Blok JR 65, Sungai Duren, Jambi Luar Kota, Muaro Jambi, Jambi, Indonesia</div>
+      </div>
+      <div class="contact-card">
+        <div class="label">NIB (Nomor Induk Berusaha)</div>
+        <div class="value">[isi nomor NIB di sini]</div>
+      </div>
+      <div class="contact-card">
+        <div class="label">Grup Langganan #1</div>
+        <div class="value"><a href="https://chat.whatsapp.com/FBSqoVBrOIl0gJ1HK4n3DP" target="_blank" rel="noopener">Join Grup WhatsApp</a></div>
+      </div>
+      <div class="contact-card">
+        <div class="label">Grup Langganan #2</div>
+        <div class="value"><a href="https://chat.whatsapp.com/IdQiGDoYJfeAB8r2Ay7zps" target="_blank" rel="noopener">Join Grup WhatsApp</a></div>
+      </div>
+      <div class="contact-card">
+        <div class="label">TC / Cari Player</div>
+        <div class="value"><a href="https://chat.whatsapp.com/F239XL1xdJxB4NKQyYkxis" target="_blank" rel="noopener">Join Grup WhatsApp</a></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div>FT PROMAX — Turnamen Free Fire Cepat</div>
+    <div class="fine">© 2026 FT PROMAX — Yogi Riski Permana. Seluruh kegiatan turnamen bersifat kompetisi berbasis skill, bukan perjudian.</div>
+  </div>
+</footer>
+
+</body>
+</html>
