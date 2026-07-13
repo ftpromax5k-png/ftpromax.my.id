@@ -60,6 +60,17 @@
   .error { color: #ff6b6b; font-size: 14px; margin-top: 12px; }
   .hidden { display: none; }
   .note { color: var(--muted); font-size: 12px; margin-top: 24px; }
+  .footer-links {
+    margin-top: 40px;
+    padding-top: 20px;
+    border-top: 1px solid var(--border);
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+    font-size: 12px;
+  }
+  .footer-links a { color: var(--muted); text-decoration: none; }
+  .footer-links a:hover { color: var(--orange); text-decoration: underline; }
 </style>
 </head>
 <body>
@@ -89,6 +100,14 @@
 </div>
 
 <p class="note">Kamu akan diarahkan ke halaman pembayaran resmi iPaymu untuk menyelesaikan transaksi via QRIS.</p>
+
+<div class="footer-links">
+  <a href="/index.html#syarat">Syarat &amp; Ketentuan</a>
+  <a href="/index.html#refund">Kebijakan Refund</a>
+  <a href="/index.html#privasi">Kebijakan Privasi</a>
+  <a href="/index.html#faq">FAQ</a>
+  <a href="/index.html#kontak">Kontak</a>
+</div>
 
 <script>
   // Ganti sesuai domain API kamu (VPS dengan SSL aktif)
@@ -135,5 +154,6 @@
   });
 </script>
 
+<script defer src="https://static.cloudflareinsights.com/beacon.min.js/v4513226cdae34746b4dedf0b4dfa099e1781791509496" integrity="sha512-ZE9pZaUXND66v380QUtch/5sE9tPFh2zg45pR2PB0CVkCtOREv2AJKkSidISWkysEuQ0EH8faUU5du78bx87UQ==" data-cf-beacon='{"version":"2024.11.0","token":"c57f5fa616574dfd89cb915c00250360","r":1,"server_timing":{"name":{"cfCacheStatus":true,"cfEdge":true,"cfExtPri":true,"cfL4":true,"cfOrigin":true,"cfSpeedBrain":true},"location_startswith":null}}' crossorigin="anonymous"></script>
 </body>
 </html>
