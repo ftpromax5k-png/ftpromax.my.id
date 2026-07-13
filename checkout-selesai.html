@@ -3,42 +3,157 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Pembayaran Diterima — FT PROMAX</title>
+<title>Checkout — FT PROMAX</title>
 <style>
+  :root {
+    --bg: #0e0e12;
+    --card: #17171d;
+    --border: #2a2a32;
+    --orange: #f3702a;
+    --text: #e8e8ea;
+    --muted: #9a9aa5;
+  }
+  * { box-sizing: border-box; }
   body {
     margin: 0;
-    background: #0e0e12;
-    color: #e8e8ea;
+    background: var(--bg);
+    color: var(--text);
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-    padding: 60px 16px;
-    text-align: center;
+    padding: 24px 16px 60px;
   }
-  .brand { font-weight: 800; font-size: 20px; margin-bottom: 40px; }
-  .brand span { color: #f3702a; }
-  .check { font-size: 48px; margin-bottom: 16px; }
-  h1 { font-size: 20px; margin: 0 0 12px; }
-  p { color: #9a9aa5; font-size: 14px; line-height: 1.6; max-width: 320px; margin: 0 auto; }
-  a.btn {
-    display: inline-block;
-    margin-top: 28px;
-    background: #f3702a;
+  .brand { font-weight: 800; font-size: 20px; margin-bottom: 24px; }
+  .brand span { color: var(--orange); }
+  h1 { font-size: 22px; margin: 0 0 8px; }
+  p.sub { color: var(--muted); margin: 0 0 24px; font-size: 14px; }
+  .card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 20px;
+    margin-bottom: 16px;
+  }
+  label { display: block; font-size: 13px; color: var(--muted); margin-bottom: 6px; margin-top: 16px; }
+  label:first-child { margin-top: 0; }
+  select, input {
+    width: 100%;
+    padding: 12px;
+    background: #0e0e12;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    color: var(--text);
+    font-size: 15px;
+  }
+  button {
+    width: 100%;
+    padding: 14px;
+    background: var(--orange);
     color: #111;
     font-weight: 700;
-    padding: 12px 24px;
+    border: none;
     border-radius: 8px;
-    text-decoration: none;
-    font-size: 14px;
+    font-size: 15px;
+    margin-top: 20px;
+    cursor: pointer;
   }
+  button:disabled { opacity: 0.5; cursor: not-allowed; }
+  .price { color: var(--orange); font-weight: 700; }
+  .error { color: #ff6b6b; font-size: 14px; margin-top: 12px; }
+  .hidden { display: none; }
+  .note { color: var(--muted); font-size: 12px; margin-top: 24px; }
+  .footer-links {
+    margin-top: 40px;
+    padding-top: 20px;
+    border-top: 1px solid var(--border);
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+    font-size: 12px;
+  }
+  .footer-links a { color: var(--muted); text-decoration: none; }
+  .footer-links a:hover { color: var(--orange); text-decoration: underline; }
 </style>
 </head>
 <body>
-  <div class="brand">FT <span>PROMAX</span></div>
-  <div class="check">✅</div>
-  <h1>Pembayaran diterima</h1>
-  <p>
-    Terima kasih! Transaksi kamu sedang diproses. Link grup WhatsApp untuk sesi
-    yang kamu daftarkan akan dikirim otomatis begitu pembayaran terkonfirmasi.
-  </p>
-  <a class="btn" href="https://wa.me/6283872900632" target="_blank">Hubungi Admin via WhatsApp</a>
+
+<div class="brand">FT <span>PROMAX</span></div>
+<h1>Checkout Sesi Turnamen</h1>
+<p class="sub">Pilih layanan, lalu lanjut ke pembayaran QRIS via iPaymu.</p>
+
+<div class="card" id="form-card">
+  <label for="layanan">Pilih Layanan</label>
+  <select id="layanan">
+    <option value="reguler">Sesi Reguler — Rp5.000</option>
+    <option value="prime">Sesi Prime Time (18:00–21:00) — Rp5.000</option>
+    <option value="cloter">Cloter Tambahan — Rp5.000</option>
+    <option value="liga">Kualifikasi Liga Mingguan — Rp5.000</option>
+    <option value="championship">Kualifikasi Championship Bulanan — Rp5.000</option>
+  </select>
+
+  <label for="nama_tim">Nama Tim</label>
+  <input id="nama_tim" type="text" placeholder="Contoh: Tim Garuda">
+
+  <label for="no_wa">Nomor WhatsApp</label>
+  <input id="no_wa" type="tel" placeholder="08xxxxxxxxxx">
+
+  <button id="btn-bayar">Lanjut ke Pembayaran</button>
+  <div id="error-msg" class="error hidden"></div>
+</div>
+
+<p class="note">Kamu akan diarahkan ke halaman pembayaran resmi iPaymu untuk menyelesaikan transaksi via QRIS.</p>
+
+<div class="footer-links">
+  <a href="/index.html#syarat">Syarat &amp; Ketentuan</a>
+  <a href="/index.html#refund">Kebijakan Refund</a>
+  <a href="/index.html#privasi">Kebijakan Privasi</a>
+  <a href="/index.html#faq">FAQ</a>
+  <a href="/index.html#kontak">Kontak</a>
+</div>
+
+<script>
+  // Ganti sesuai domain API kamu (VPS dengan SSL aktif)
+  const API_BASE = "https://api.ftpromax.my.id/api/web";
+
+  const btnBayar = document.getElementById('btn-bayar');
+  const errorMsg = document.getElementById('error-msg');
+
+  btnBayar.addEventListener('click', async () => {
+    const layanan = document.getElementById('layanan').value;
+    const nama_tim = document.getElementById('nama_tim').value.trim();
+    const no_wa = document.getElementById('no_wa').value.trim();
+
+    errorMsg.classList.add('hidden');
+
+    if (!nama_tim || !no_wa) {
+      errorMsg.textContent = 'Nama tim dan nomor WhatsApp wajib diisi.';
+      errorMsg.classList.remove('hidden');
+      return;
+    }
+
+    btnBayar.disabled = true;
+    btnBayar.textContent = 'Memproses...';
+
+    try {
+      const res = await fetch(`${API_BASE}/checkout`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ layanan, nama_tim, no_wa }),
+      });
+      const data = await res.json();
+
+      if (!res.ok) throw new Error(data.error || 'Gagal membuat transaksi');
+      if (!data.payment_url) throw new Error('Link pembayaran tidak ditemukan, coba lagi.');
+
+      // Redirect ke halaman pembayaran resmi iPaymu
+      window.location.href = data.payment_url;
+    } catch (err) {
+      errorMsg.textContent = err.message;
+      errorMsg.classList.remove('hidden');
+      btnBayar.disabled = false;
+      btnBayar.textContent = 'Lanjut ke Pembayaran';
+    }
+  });
+</script>
+
+<script defer src="https://static.cloudflareinsights.com/beacon.min.js/v4513226cdae34746b4dedf0b4dfa099e1781791509496" integrity="sha512-ZE9pZaUXND66v380QUtch/5sE9tPFh2zg45pR2PB0CVkCtOREv2AJKkSidISWkysEuQ0EH8faUU5du78bx87UQ==" data-cf-beacon='{"version":"2024.11.0","token":"c57f5fa616574dfd89cb915c00250360","r":1,"server_timing":{"name":{"cfCacheStatus":true,"cfEdge":true,"cfExtPri":true,"cfL4":true,"cfOrigin":true,"cfSpeedBrain":true},"location_startswith":null}}' crossorigin="anonymous"></script>
 </body>
 </html>
